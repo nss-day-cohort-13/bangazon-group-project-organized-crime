@@ -2,7 +2,7 @@ import unittest
 
 from customer import *
 
-class Test_customer(unittest.TestCase):
+class TestCustomer(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):

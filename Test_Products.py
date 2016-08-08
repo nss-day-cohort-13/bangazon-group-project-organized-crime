@@ -3,7 +3,7 @@ import unittest
 from products import *
 
 
-class Test_products(unittest.TestCase):
+class TestProducts(unittest.TestCase):
 
     @classmethod
     def setUpClass(self):
@@ -20,7 +20,7 @@ class Test_products(unittest.TestCase):
         product_type_list = []
 
         for product_name in products:
-            product_type_list.append(product_type["product_name"])
-            product_type_list.append(product_type["product_price"])
+            product_type_list.append(product_name["product_name"])
+            product_type_list.append(product_name["product_price"])
         self.assertIn("Brass Knuckles", product_type_list)
         self.assertIn(19.99, product_type_list)

@@ -24,3 +24,6 @@ class TestProducts(unittest.TestCase):
             product_type_list.append(product_name["product_price"])
         self.assertIn("Brass Knuckles", product_type_list)
         self.assertIn(19.99, product_type_list)
+
+if __name__ == '__main__':
+    unittest.main()

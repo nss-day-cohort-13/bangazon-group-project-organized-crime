@@ -25,3 +25,6 @@ class TestCustomer(unittest.TestCase):
         for customer_name in customers:
             customer_list.append(customer_name["name"])
         self.assertIn("Frankie the Nose", customer_list)
+
+if __name__ == '__main__':
+    unittest.main()

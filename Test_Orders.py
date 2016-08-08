@@ -30,3 +30,6 @@ class TestOrder(unittest.TestCase):
     #         order_list.append(order[self.frankie_order.customer_UUID])
     #     self.assertEqual(self.frankie_order.customer_UUID, self.frankie.customer_UUID )
     #     self.assertEqual(self.frankie_order.payment_UUID, self.frankie_payment.payment_UUID)
+
+if __name__ == '__main__':
+    unittest.main()

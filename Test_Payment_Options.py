@@ -27,3 +27,6 @@ class TestPaymentOptions(unittest.TestCase):
             payment_type_list.append(payment_name["account_number"])
         self.assertIn("visa", payment_type_list)
         self.assertIn("123456789", payment_type_list)
+
+if __name__ == '__main__':
+    unittest.main()

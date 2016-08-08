@@ -21,6 +21,7 @@ class Test_customer(unittest.TestCase):
     def test_customer_retrieval(self):
         customers = Customer.read_customers()
         customer_list = []
+
         for customer_name in customers:
-            customer_list.append(customer_name["customer_name"])
+            customer_list.append(customer_name["name"])
         self.assertIn("Frankie the Nose", customer_list)

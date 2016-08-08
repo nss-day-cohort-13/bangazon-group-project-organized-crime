@@ -13,7 +13,7 @@ class TestCustomer(unittest.TestCase):
         self.assertEqual("100 thief ave", self.frankie.address)
         self.assertEqual("Bellvue", self.frankie.city)
         self.assertEqual("TN", self.frankie.state)
-        self.assertEqual("37204", self.frankie.zip)
+        self.assertEqual("37204", self.frankie.zipcode)
         self.assertEqual("615-867-5309", self.frankie.phone)
         self.assertIsNotNone(self.frankie.customer_UUID)
 

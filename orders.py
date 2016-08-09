@@ -28,24 +28,25 @@ class Order:
         with open("orders.txt", "ab+") as pickle_file:
             pickle.dump(self.order_data, pickle_file)
 
-    def read_orders(self):
+    @staticmethod
+    def read_orders():
         """ Reads all the orders in the orders.txt CSV file.
 
         Keyword arguments: None
         Uses the pickle module to deserialize data from the csv file.
          """
-        self.orders_deserialized = []
+        orders_deserialized = []
         with open("orders.txt", "rb+") as pickle_file:
             while True:
                 try:
-                    self.orders_deserialized.append(pickle.load(pickle_file))
+                    orders_deserialized.append(pickle.load(pickle_file))
                 except FileNotFoundError:
                     print("I'm a potato!")
                 except EOFError:
                     break
-            print(self.orders_deserialized)
-            return self.orders_deserialized
+            print(orders_deserialized)
+            return orders_deserialized
 
 if __name__ == '__main__':
     Order.read_orders()
-    # Order(1234, 4567)
+    # Order(1234435345345, 937924837928)

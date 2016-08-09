@@ -35,8 +35,8 @@ class Payment():
                     payment_option_list.append(pickle.load(file))
                 except  EOFError:
                     break
-                print(payment_option_list)
-                return payment_option_list
+            print(payment_option_list)
+            return payment_option_list
 
 
 

@@ -3,7 +3,7 @@ import pickle
 
 from customer import *
 
-class PaymentOptions():
+class Payment():
 
     def __init__(self,
         payment_name,
@@ -15,7 +15,7 @@ class PaymentOptions():
         self.customer_UUID = customer_id
         self.payment_option_UUID = uuid.uuid4().int
         self.payment_option_object = {"payment option name": self.payment_option_name,
-                                      "payment account number": self.payment_acc_number,
+                                      "payment account number": self.payment_option_acc_number,
                                       "customer id": self.customer_UUID,
                                       "payment option uuid": self.payment_option_UUID
                                       }

@@ -17,9 +17,9 @@ class TestCustomer(unittest.TestCase):
         self.assertEqual("615-867-5309", self.frankie.phone)
         self.assertIsNotNone(self.frankie.customer_UUID)
 
-    # @staticmethod
+
     def test_customer_retrieval(self):
-        self.customers = Customer.read_customers(self)
+        self.customers = Customer.read_customers()
         self.customer_list = []
 
         for customer_name in self.customers:

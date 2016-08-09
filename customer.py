@@ -35,13 +35,17 @@ class Customer:
         with open('customers.txt', 'ab+') as f:
             pickle.dump(self.customer_object, f)
 
-    def read_customers(self):
-        self.customer_list = []
+    @staticmethod
+    def read_customers():
+        customer_list = []
         with open('customers.txt', 'rb+') as f:
             while True:
                 try:
-                    self.customer_list.append(pickle.load(f))
+                    customer_list.append(pickle.load(f))
                 except EOFError:
                     break
-            print(self.customer_list)
-            return self.customer_list
+            print(customer_list)
+            return customer_list
+
+if __name__ == '__main__':
+    Customer.read_customers()

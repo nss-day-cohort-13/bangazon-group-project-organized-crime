@@ -11,11 +11,11 @@ class TestOrder(unittest.TestCase):
     def setUpClass(self):
         self.frankie = Customer("Frankie the Nose", "100 thief ave", "Bellvue", "TN", "37204", "615-867-5309")
         self.frankie_payment = Payment("visa", "123456789", self.frankie.customer_UUID)
-        self.frankie_order = Order(self.frankie.customer_UUID, self.frankie_payment.payment_UUID)
+        self.frankie_order = Order(self.frankie.customer_UUID, self.frankie_payment.payment_option_UUID)
 
     def test_order_creation(self):
         self.assertEqual(self.frankie_order.customer_UUID, self.frankie.customer_UUID)
-        self.assertEqual(self.frankie_order.payment_UUID, frankie_payment.payment_UUID)
+        self.assertEqual(self.frankie_order.payment_UUID, self.frankie_payment.payment_option_UUID)
         self.assertEqual(self.frankie.customer_UUID, self.frankie_payment.customer_UUID)
         self.assertFalse(self.frankie_order.paid)
         self.assertIsNotNone(self.frankie_order.order_UUID)

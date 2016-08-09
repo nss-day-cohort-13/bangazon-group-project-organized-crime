@@ -8,11 +8,12 @@ class Order:
         self.customer_UUID = customer_id
         self.payment_UUID = payment_id
         self.order_UUID = uuid.uuid4().int
+        self.paid = False
         self.order_data = {
                         "order_UUID": self.order_UUID,
                         "customer_UUID": self.customer_UUID,
                         "payment_UUID": self.payment_UUID,
-                        "paid": False
+                        "paid": self.paid
                         }
         self.create_order()
 

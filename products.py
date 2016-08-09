@@ -1,37 +1,41 @@
 import uuid
 import pickle
 
-class Products:
+class Product:
 
-    def __init__(self):
+    def __init__(self, name_of_product, unit_cost_of_product):
         self.unpickled_product_data = []
+        self.product_UUID = uuid.uuid4().int
+        self.name_of_product = name_of_product
+        self.unit_cost_of_product = unit_cost_of_product
 
-    def createProduct(self, name_of_product, unit_cost_of_product):
-        try:
-            self.retrieveProduct()
-        except EOFError:
-            pass
-        except FileNotFoundError:
-            print('You want the impossible.')
+        self.product_object =   {
+                                'product_UUID': self.product_UUID,
+                                'product_name': self.name_of_product,
+                                'product_price': self.unit_cost_of_product
+                                }
 
-        with open('products.txt', 'wb+') as pickle_products_file:
-            products_data = {
-                            'product_UUID': uuid.uuid4().int,
-                            'product_name': name_of_product,
-                            'product_price': unit_cost_of_product
-                            }
+        self.serialize_product()
 
-            self.unpickled_product_data.append(products_data)
-            pickle.dump(self.unpickled_product_data, pickle_products_file)
+    def serialize_product(self):
+        with open ('products.txt', 'wb+') as pickle_products_file:
+            pickle.dump(self.product_object, pickle_products_file)
 
 
-    def retrieveProduct(self):
-        with open ('products.txt', 'rb+') as pickle_products_file:
-            self.unpickled_product_data = pickle.load(pickle_products_file)
-            print(self.unpickled_product_data)
-            return self.unpickled_product_data
+    @staticmethod
+    def read_products():
+        product_list = []
+        with open ('products.txt', 'rb') as pickle_products_file:
+            while True:
+                try:
+                    product_list.append(pickle.load(pickle_products_file))
+                except EOFError:
+                    break
+
+            print(product_list)
+            return product_list
 
 if __name__ == '__main__':
-    products = Products()
+    products = Product()
     # products.createProduct('spiked baseball bat', 37.99)
-    products.retrieveProduct()
+    products.read_products()

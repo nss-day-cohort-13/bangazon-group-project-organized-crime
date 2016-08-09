@@ -18,7 +18,7 @@ class Product:
         self.serialize_product()
 
     def serialize_product(self):
-        with open ('products.txt', 'wb+') as pickle_products_file:
+        with open ('products.txt', 'ab+') as pickle_products_file:
             pickle.dump(self.product_object, pickle_products_file)
 
 

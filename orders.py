@@ -2,9 +2,22 @@ import pickle
 import uuid
 
 class Order:
-    """ Creates new orders and reads orders that were created. """
+    """
+    Creates new orders and reads all orders that have been created.
+
+    Methods on class:
+      create_order()
+      read_orders()
+    """
     def __init__(self, customer_id, payment_id):
-        """  """
+        """
+        Creates an order with a unique order id(UUID module), the id of the
+        active customer, and the id of the payment chosen by the user.
+
+        Keyword Arguments:
+        customer_id = the UUID of the active customer_id
+        payment_id = is 0 until the customer selects their payment option
+         """
         self.customer_UUID = customer_id
         self.payment_UUID = payment_id
         self.order_UUID = uuid.uuid4().int
@@ -18,24 +31,15 @@ class Order:
         self.create_order()
 
     def create_order(self):
-        """ Writes a new order to the orders.txt CSV file.
-
-        Keyword arguements:
-        customer_id -- the id of the customer creating the order_id
-        payment_id -- id of the payment that the customer chose to use
-        Uses the pickle module to serialize data from the CSV file.
-         """
+        """ Serializes a new order by pickling to the orders.txt file. """
 
         with open("orders.txt", "ab+") as pickle_file:
             pickle.dump(self.order_data, pickle_file)
 
     @staticmethod
     def read_orders():
-        """ Reads all the orders in the orders.txt CSV file.
+        """ Deserializes all the pickled orders in the orders.txt file."""
 
-        Keyword arguments: None
-        Uses the pickle module to deserialize data from the csv file.
-         """
         orders_deserialized = []
         with open("orders.txt", "rb+") as pickle_file:
             while True:

@@ -45,7 +45,7 @@ class OrderLineItem:
                 except EOFError:
                     break
 
-            print(order_line_items_list)
+            # print(order_line_items_list)
             return order_line_items_list
 
 
@@ -55,4 +55,3 @@ class OrderLineItem:
 
 # if __name__ == '__main__':
 #     OrderLineItem.read_order_line_items()
-

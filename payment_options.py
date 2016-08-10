@@ -35,7 +35,7 @@ class Payment():
                     payment_option_list.append(pickle.load(file))
                 except  EOFError:
                     break
-            print(payment_option_list)
+            # print(payment_option_list)
             return payment_option_list
 
 
@@ -43,10 +43,3 @@ class Payment():
 
     # if __name__ == '__main__':
     # unittest.main()
-
-
-
-
-
-
-

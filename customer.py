@@ -69,7 +69,7 @@ class Customer:
                     customer_list.append(pickle.load(f))
                 except EOFError:
                     break
-            print(customer_list)
+            # print(customer_list)
             return customer_list
 
 if __name__ == '__main__':

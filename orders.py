@@ -2,12 +2,19 @@ import pickle
 import uuid
 
 class Order:
-    """ Creates new orders and reads all orders that have been created. """
+    """
+    Creates new orders and reads all orders that have been created.
+
+    Methods on class:
+      create_order()
+      read_orders()
+    """
     def __init__(self, customer_id, payment_id):
-        """ Creates an order with a unique order id(UUID module), the id of the
+        """
+        Creates an order with a unique order id(UUID module), the id of the
         active customer, and the id of the payment chosen by the user.
 
-        Arguments:
+        Keyword Arguments:
         customer_id = the UUID of the active customer_id
         payment_id = is 0 until the customer selects their payment option
          """

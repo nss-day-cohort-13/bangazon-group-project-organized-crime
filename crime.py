@@ -12,6 +12,8 @@ class Crime:
         # self.payment_id = []
         self.product_list = ""
         self.active_order = ""
+        self.active_payment = ""
+        self.total_price = 0
 
 
     # test, then logic, then menu, then files.
@@ -111,27 +113,28 @@ class Crime:
             self.show_products()
         else:
             print("something went wrong")
-    def show_order():
-        order_line_item_list = OrderLineItem.read_order_line_items()
-        active_order_line_items = []
-        product_list = Product.read_products()
-        total_price = 0
 
-        for OLI in order_line_item_list:
-            if Crime.active_order == OLI["order_UUID"]:
-                active_order_line_items.append(OLI)
-
-        print("active OLI: ", active_order_line_items)
-
-
-        for item in active_order_line_items:
-            for product in product_list:
-                if product['product_UUID'] == item['product_UUID']:
-                    print(product["product_name"])
-                    total_price += float(product["product_price"])
-                print("you gotta pay: ", total_price)
-        # print(new_OLI.order_line_item_object)
-        # print(product_list[(which - 1)]["product_name"])
+    # def show_order():
+    #     order_line_item_list = OrderLineItem.read_order_line_items()
+    #     active_order_line_items = []
+    #     product_list = Product.read_products()
+    #     total_price = 0
+    #
+    #     for OLI in order_line_item_list:
+    #         if Crime.active_order == OLI["order_UUID"]:
+    #             active_order_line_items.append(OLI)
+    #
+    #     print("active OLI: ", active_order_line_items)
+    #
+    #
+    #     for item in active_order_line_items:
+    #         for product in product_list:
+    #             if product['product_UUID'] == item['product_UUID']:
+    #                 print(product["product_name"])
+    #                 total_price += float(product["product_price"])
+    #             print("you gotta pay: ", total_price)
+    #     # print(new_OLI.order_line_item_object)
+    #     # print(product_list[(which - 1)]["product_name"])
 
     def show_order():
             order_line_item_list = OrderLineItem.read_order_line_items()
@@ -143,7 +146,7 @@ class Crime:
                 if Crime.active_order == OLI["order_UUID"]:
                     active_order_line_items.append(OLI)
 
-            print("active OLI: ", active_order_line_items)
+            # print("active OLI: ", active_order_line_items)
 
 
             for item in active_order_line_items:
@@ -152,6 +155,7 @@ class Crime:
                         print(product["product_name"])
                         total_price += float(product["product_price"])
             print("you gotta pay: ", total_price)
+            Crime.total_price = total_price
             Crime.show_payments()
 
 
@@ -163,6 +167,10 @@ class Crime:
                 active_user_payments.append(payment)
         if len(active_user_payments) == 0:
             Crime.create_payment()
+            payment_list = Payment.read_payments()
+            for payment in payment_list:
+                if Crime.active_user == payment["customer id"]:
+                    active_user_payments.append(payment)
 
         counter = 1
         for payment in active_user_payments:
@@ -171,7 +179,10 @@ class Crime:
             counter += 1
         which = int(input("which card? "))
         Crime.active_payment = active_user_payments[(which - 1)]["payment option uuid"]
-        print(Crime.active_payment)
+        if Crime.active_payment != "":
+            Crime.show_order_total()
+
+        # print(Crime.active_payment)
 
     def create_payment():
         print(
@@ -179,9 +190,39 @@ class Crime:
             'BETTER HAVE MY MONEY!'
             '\n' '\n'
             )
-        name = input("PAYMENT NAME > ")
+        name = input("CARD NAME > ")
         account = input("ACCOUNT NUMBER > ")
         new_payment = Payment(name, account, Crime.active_user)
+
+    def show_order_total():
+        print(
+            '\n'"TOTAL: " + str(Crime.total_price) +
+            '\n'
+            "SUBMIT?"
+            '\n'
+            "1. YES"
+            '\n'
+            "2. NO"
+            '\n'
+            )
+
+        submit = input("> ")
+        if submit == "1":
+            print("WELCOME TO THE MOB")
+        elif submit == "2":
+            print(
+            "Where to?"
+            '\n'
+            "1. Main Menu"
+            '\n'
+            "2. Exit"
+            '\n'
+            )
+            choice = input("> ")
+            if choice == "1":
+                Crime.welcome_menu(self)
+            if choice == '2':
+                exit()
 
 #
 #     def get_payment_options(self):

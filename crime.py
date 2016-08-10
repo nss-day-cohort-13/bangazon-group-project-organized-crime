@@ -2,6 +2,7 @@ from orders import *
 from payment_options import *
 from customer import *
 from products import *
+from order_line_item import *
 
 class Crime:
     def __init__(self):
@@ -50,11 +51,10 @@ class Crime:
         if which == 2:
             exit()
         else:
-            self.active_customer = customer_list[(which - 1)]["customer_UUID"]
-            # print(self.active_customer)
+            Crime.active_user = customer_list[(which - 3)]["customer_UUID"]
 
-            new_order = Order(customer_list[(which - 1)]["customer_UUID"], 0)
-            self.active_order = new_order.order_UUID
+            new_order = Order(customer_list[(which - 3)]["customer_UUID"], 0)
+            Crime.active_order = new_order.order_UUID
             # print("Welcome " + )
             self.show_products()
 
@@ -82,22 +82,106 @@ class Crime:
         customer_phone = input("ENTER YOUR PHONE NUMBER > ")
 
         new_customer = Customer(customer_name, customer_street_address, customer_city, customer_state, customer_zip, customer_phone)
-        print(new_customer.customer_object)
-
+        # print(new_customer.customer_object)
+        new_order = Order(new_customer.customer_UUID, 0)
+        Crime.active_order = new_order.order_UUID
+        Crime.active_user = new_customer.customer_UUID
+        print("your active user", Crime.active_user)
         self.show_products()
 
 
     def show_products(self):
         product_list = Product.read_products()
-        counter = 1
+        counter = 4
+        print("1. Checkout")
+        print("2. Main Menu")
+        print("3. Exit")
         for product in product_list:
             print(str(counter) + ". " + str(product["product_name"]))
             counter += 1
         which = int(input("what you want? "))
-        new_OLI = OrderLineItem(Crime.active_order, product_list[(which - 1)]["product_UUID"])
+        if which == 1:
+            Crime.show_order()
+        elif which == 2:
+            self.welcome_menu()
+        elif which == 3:
+            exit()
+        elif which > 3:
+            new_OLI = OrderLineItem(Crime.active_order, product_list[(which - 4)]["product_UUID"])
+            self.show_products()
+        else:
+            print("something went wrong")
+    def show_order():
+        order_line_item_list = OrderLineItem.read_order_line_items()
+        active_order_line_items = []
+        product_list = Product.read_products()
+        total_price = 0
 
+        for OLI in order_line_item_list:
+            if Crime.active_order == OLI["order_UUID"]:
+                active_order_line_items.append(OLI)
+
+        print("active OLI: ", active_order_line_items)
+
+
+        for item in active_order_line_items:
+            for product in product_list:
+                if product['product_UUID'] == item['product_UUID']:
+                    print(product["product_name"])
+                    total_price += float(product["product_price"])
+                print("you gotta pay: ", total_price)
         # print(new_OLI.order_line_item_object)
         # print(product_list[(which - 1)]["product_name"])
+
+    def show_order():
+            order_line_item_list = OrderLineItem.read_order_line_items()
+            active_order_line_items = []
+            product_list = Product.read_products()
+            total_price = 0
+
+            for OLI in order_line_item_list:
+                if Crime.active_order == OLI["order_UUID"]:
+                    active_order_line_items.append(OLI)
+
+            print("active OLI: ", active_order_line_items)
+
+
+            for item in active_order_line_items:
+                for product in product_list:
+                    if product['product_UUID'] == item['product_UUID']:
+                        print(product["product_name"])
+                        total_price += float(product["product_price"])
+            print("you gotta pay: ", total_price)
+            Crime.show_payments()
+
+
+    def show_payments():
+        payment_list = Payment.read_payments()
+        active_user_payments = []
+        for payment in payment_list:
+            if Crime.active_user == payment["customer id"]:
+                active_user_payments.append(payment)
+        if len(active_user_payments) == 0:
+            Crime.create_payment()
+
+        counter = 1
+        for payment in active_user_payments:
+
+            print(str(counter) + ". " + str(payment["payment option name"]))
+            counter += 1
+        which = int(input("which card? "))
+        Crime.active_payment = active_user_payments[(which - 1)]["payment option uuid"]
+        print(Crime.active_payment)
+
+    def create_payment():
+        print(
+            '\n'
+            'BETTER HAVE MY MONEY!'
+            '\n' '\n'
+            )
+        name = input("PAYMENT NAME > ")
+        account = input("ACCOUNT NUMBER > ")
+        new_payment = Payment(name, account, Crime.active_user)
 
 #
 #     def get_payment_options(self):

@@ -33,5 +33,5 @@ class Crime:
             if self.active_user == order["customer_UUID"]:
                 active_user_past_orders.append(order])
 
-    def line_items(self):
+    def list_line_item_products_with_prices(self):
         pass

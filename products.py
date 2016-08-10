@@ -32,10 +32,10 @@ class Product:
                 except EOFError:
                     break
 
-            print(product_list)
+            # print(product_list)
             return product_list
 
-if __name__ == '__main__':
-    products = Product()
-    # products.createProduct('spiked baseball bat', 37.99)
-    products.read_products()
+# if __name__ == '__main__':
+    # products = Product("brass knuckles", 19.99)
+    # products = Product("spiked baseball bat", 36.99)
+    # products = Product("piano wire (middle C)", 3.99)

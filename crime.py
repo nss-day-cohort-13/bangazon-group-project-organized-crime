@@ -1,6 +1,7 @@
 from orders import *
 from payment_options import *
 from customer import *
+from products import *
 
 class Crime:
     def __init__(self):
@@ -87,63 +88,17 @@ class Crime:
 
 
     def show_products(self):
-        print("Here are your products")
+        product_list = Product.read_products()
+        counter = 1
+        for product in product_list:
+            print(str(counter) + ". " + str(product["product_name"]))
+            counter += 1
+        which = int(input("what you want? "))
+        new_OLI = OrderLineItem(Crime.active_order, product_list[(which - 1)]["product_UUID"])
 
-#             user_full_name = input(">")
-#             # store in memory, then
-#
-#             print   (
-#                     "Please Enter the New User's Screen Name"
-#                     "\n" "\n"
-#                     )
-#
-#             user_screen_name = input(">")
-#
-#         elif selection == '2':
-#             print ("Who would you like to pretend you are today?")
-#             # print list of user names from user_data.txt
-#             input (">")
-#
-#         elif selection == '3':
-#             print   (
-#                     "\n"
-#                     "View All Chirps" "\n" "\n"
-#                     "1. View all private Chirps." "\n"
-#                     "2. View all public Chirps."
-#                     )
-#             input (">")
-#
-#         #     if selection == '1':
-#         #         # goto list of users with whom this user has private Chirps
-#         #     elif selection == '2':
-#         #         # goto chronological list of all public chirps.
-#         #         #   Hmm...chronological by first Chirp or by most recent reply?)
-#         #     else print ("You don't know what you want.")
-#
-#         # elif selection == '4':
-#         #     print ("You Can Make A New Public Chirp!")
-#         #     print ("No, go ahead;  We're all so interested in what you have to say.")
-#         #     print ("")
-#         #     input (">")
-#
-#         elif selection == '5':
-#             print ("You Can Make A New Private Chirp!")
-#             print ("From which user do you desperately crave attention," \
-#                     " you very lonely person?")
-#             print ("")
-#             # print (numbered userlist)
-#             print ("")
-#             input (">")
-#
-#         elif selection == '6':
-#             print   ("Yes!  Go outside; play in the rain." "\n"
-#                     "Love yourself more than this.")
-#
-#         else:
-#             print ("You want the impossible.")
-#             main_menu()
-#
-# main_menu()
+        # print(new_OLI.order_line_item_object)
+        # print(product_list[(which - 1)]["product_name"])
+
 #
 #     def get_payment_options(self):
 #         active_user_payments = []

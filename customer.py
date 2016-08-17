@@ -1,6 +1,4 @@
-import pickle
-import uuid
-
+import sqlite3
 
 class Customer:
     '''
@@ -26,51 +24,45 @@ class Customer:
                  customer_city,
                  customer_state,
                  customer_zip,
-                 customer_phone):
+                 customer_phone
+                 ):
 
+        self.customer_UUID = None
         self.name = customer_name
         self.address = customer_address
         self.city = customer_city
         self.state = customer_state
         self.zipcode = customer_zip
         self.phone = customer_phone
-        self.customer_UUID = uuid.uuid4().int
-        self.customer_object = {"name": self.name,
+        self.customer_object = {
+                                "customer_UUID": self.customer_UUID,
+                                "name": self.name,
                                 "address": self.address,
                                 "city": self.city,
                                 "state": self.state,
                                 "zipcode": self.zipcode,
-                                "phone": self.phone,
-                                "customer_UUID": self.customer_UUID}
-        self.serialize_customer()
-        # self.read_customers()
+                                "phone": self.phone
+                                }
+        self.write_to_customer()
 
-    def serialize_customer(self):
-        '''
-        using pickle, serializes the customer_object, writing it to a
-        text file.
-        '''
-        # self.customer_dict = {}
-        # self.customer_dict.update(user_object)
-        with open('customers.txt', 'ab+') as f:
-            pickle.dump(self.customer_object, f)
+    def write_to_customer(self):
 
-    @staticmethod
-    def read_customers():
-        '''
-        using pickle, deserializes customer_objects from txt file
-        and adds each item to a list, which is then returned, allowing access
-        to customer data in other modules
-        '''
-        customer_list = []
-        with open('customers.txt', 'rb+') as f:
-            while True:
-                try:
-                    customer_list.append(pickle.load(f))
-                except EOFError:
-                    break
-            # print(customer_list)
-            return customer_list
+        with sqlite3.connect('bangazon.db') as conn:
+            c = conn.cursor()
+
+            c.execute   ("insert into customer values(?,?,?,?,?,?,?)",
+                            (
+                            self.customer_UUID,
+                            self.name,
+                            self.address,
+                            self.city,
+                            self.state,
+                            self.zipcode,
+                            self.phone
+                            )
+                        )
+            conn.commit()
 
 if __name__ == '__main__':
-    Customer.read_customers()
+    # Customer.read_customers()
+    # Customer("Bob Cocker", "456 Your Street", "Memphis", "TN", "99999", "(123) 456-7890")

@@ -38,30 +38,26 @@ class Crime:
                 self.create_new_member()
 
     def choose_active_member(self):
-        customer_list = Customer.read_customers()
-        # print("customer list from function: ", customer_list)
+
+        customer_list = []
+        with sqlite3.connect('bangazon.db') as conn:
+                c = conn.cursor()
+
         counter = 3
         print("1. Main Menu")
         print("2. Exit")
-        for customer in customer_list:
-            print(str(counter) + ". " + str(customer["name"]))
-            counter += 1
 
-        which = int(input("who you is? "))
-        if which == 1:
-            self.welcome_menu()
-        if which == 2:
-            exit()
-        else:
-            Crime.active_user = customer_list[(which - 3)]["customer_UUID"]
+        for row in c.execute("""SELECT * FROM Customer c"""):
+            customer_list.append(row)
+            print(str(counter) + ". " + str(row[1]))
+            counter +=1
 
-            new_order = Order(customer_list[(which - 3)]["customer_UUID"], 0)
-            Crime.active_order = new_order.order_UUID
-            # print("Welcome " + )
-            self.show_products()
+        choice = int(input("who are you?"))
 
-        # print(new_order.order_data)
-        # print("active order", self.active_order)
+        print(customer_list[choice - 3])
+        Crime.active_user = customer_list[choice - 3][0]
+
+
 
 
     def create_new_member(self):

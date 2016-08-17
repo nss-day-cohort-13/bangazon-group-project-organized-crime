@@ -63,6 +63,19 @@ class Customer:
                         )
             conn.commit()
 
+
+    def read_customers():
+        customer_list = []
+        with sqlite3.connect('bangazon.db') as conn:
+            c = conn.cursor()
+
+        for row in c.execute("""SELECT * FROM Customer c"""):
+            customer_list.append(row)
+        print(customer_list[1][0])
+
+
+
+
 if __name__ == '__main__':
-    # Customer.read_customers()
+    Customer.read_customers()
     # Customer("Bob Cocker", "456 Your Street", "Memphis", "TN", "99999", "(123) 456-7890")

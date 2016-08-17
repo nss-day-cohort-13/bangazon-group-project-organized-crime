@@ -38,30 +38,26 @@ class Crime:
                 self.create_new_member()
 
     def choose_active_member(self):
-        customer_list = Customer.read_customers()
-        # print("customer list from function: ", customer_list)
+
+        customer_list = []
+        with sqlite3.connect('bangazon.db') as conn:
+            c = conn.cursor()
+
         counter = 3
         print("1. Main Menu")
         print("2. Exit")
-        for customer in customer_list:
-            print(str(counter) + ". " + str(customer["name"]))
-            counter += 1
 
-        which = int(input("who you is? "))
-        if which == 1:
-            self.welcome_menu()
-        if which == 2:
-            exit()
-        else:
-            Crime.active_user = customer_list[(which - 3)]["customer_UUID"]
+        for row in c.execute("""SELECT * FROM Customer c"""):
+            customer_list.append(row)
+            print(str(counter) + ". " + str(row[1]))
+            counter +=1
 
-            new_order = Order(customer_list[(which - 3)]["customer_UUID"], 0)
-            Crime.active_order = new_order.order_UUID
-            # print("Welcome " + )
-            self.show_products()
+        choice = int(input("who are you?"))
 
-        # print(new_order.order_data)
-        # print("active order", self.active_order)
+        print(customer_list[choice - 3])
+        Crime.active_user = customer_list[choice - 3][0]
+
+
 
 
     def create_new_member(self):
@@ -74,7 +70,7 @@ class Crime:
             '\n'
             'SO YOU WANNA MAKE YOUR BONES?'
             '\n' '\n'
-            )
+             )
 
         customer_name = input("ENTER YOUR NAME > ")
         customer_street_address = input("ENTER YOUR STREET ADDRESS > ")
@@ -83,13 +79,34 @@ class Crime:
         customer_zip = input("ENTER YOUR ZIP CODE > ")
         customer_phone = input("ENTER YOUR PHONE NUMBER > ")
 
-        new_customer = Customer(customer_name, customer_street_address, customer_city, customer_state, customer_zip, customer_phone)
-        # print(new_customer.customer_object)
-        new_order = Order(new_customer.customer_UUID, 0)
-        Crime.active_order = new_order.order_UUID
-        Crime.active_user = new_customer.customer_UUID
-        print("your active user", Crime.active_user)
-        self.show_products()
+
+        new_customer = Customer(customer_name,
+                                customer_street_address,
+                                customer_city,
+                                customer_state,
+                                customer_zip,
+                                customer_phone)
+
+        customer_list = []
+        with sqlite3.connect('bangazon.db') as conn:
+            c = conn.cursor()
+
+        for row in c.execute("""SELECT * FROM Customer c"""):
+            customer_list.append(row)
+
+        Crime.active_user = customer_list[-1][0]
+        print(Crime.active_user)
+        print(customer_list[-1][0])
+
+        ##### NEED A MAKE ORDER FUNCTION IN HERE, STILL####
+
+
+        # # print(new_customer.customer_object)
+        # new_order = Order(new_customer.customer_UUID, 0)
+        # Crime.active_order = new_order.order_UUID
+        # Crime.active_user = new_customer.customer_UUID
+        # print("your active user", Crime.active_user)
+        # self.show_products()
 
 
     def show_products(self):

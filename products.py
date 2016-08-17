@@ -36,7 +36,16 @@ class Product:
 
             conn.commit()
 
-    def
+    def read_products():
+        product_list = []
+        with sqlite3.connect('bangazon.db') as conn:
+            c = conn.cursor()
+
+        for row in c.execute("""SELECT * FROM Product p"""):
+            product_list.append(row)
+        return product_list
+
+
 
 
 

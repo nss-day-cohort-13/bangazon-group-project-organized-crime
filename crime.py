@@ -57,6 +57,8 @@ class Crime:
         print(customer_list[choice - 3])
         Crime.active_user = customer_list[choice - 3][0]
 
+        self.show_products()
+
 
 
 
@@ -115,9 +117,11 @@ class Crime:
         print("1. Checkout")
         print("2. Main Menu")
         print("3. Exit")
+
         for product in product_list:
-            print(str(counter) + ". " + str(product["product_name"]))
+            print(str(counter) + ". " + str(product[1]))
             counter += 1
+
         which = int(input("what you want? "))
         if which == 1:
             Crime.show_order()
@@ -130,6 +134,8 @@ class Crime:
             self.show_products()
         else:
             print("something went wrong")
+
+
 
     # def show_order():
     #     order_line_item_list = OrderLineItem.read_order_line_items()

@@ -1,5 +1,4 @@
-import uuid
-import pickle
+import sqlite3
 
 from customer import *
 
@@ -13,33 +12,42 @@ class Payment():
         self.payment_option_name = payment_name
         self.payment_option_acc_number = payment_acc_number
         self.customer_UUID = customer_id
-        self.payment_option_UUID = uuid.uuid4().int
+        self.payment_option_UUID = None
         self.payment_option_object = {"payment option name": self.payment_option_name,
                                       "payment account number": self.payment_option_acc_number,
                                       "customer id": self.customer_UUID,
                                       "payment option uuid": self.payment_option_UUID
                                       }
-        self.serialize_payment()
+        self.write_to_payment()
 
-    def serialize_payment(self):
-        with open('payments.txt', 'ab+') as file:
-            pickle.dump(self.payment_option_object, file)
+    def write_to_payment(self):
 
+        with sqlite3.connect('bangazon.db') as conn:
+            c = conn.cursor()
 
-    @staticmethod
+        c.execute("insert into payment values(?,?,?,?)",
+                 (self.payment_option_UUID,
+                  self.payment_option_name,
+                  self.payment_option_acc_number,
+                  self.customer_UUID)
+                 )
+
+        conn.commit()
+
     def read_payments():
-        payment_option_list = []
-        with open('payments.txt', 'rb+') as file:
-            while True:
-                try:
-                    payment_option_list.append(pickle.load(file))
-                except  EOFError:
-                    break
-            # print(payment_option_list)
-            return payment_option_list
+        payment_list = []
+        with sqlite3.connect('bangazon.db') as conn:
+            c = conn.cursor()
+
+            for row in c.execute("""SELECT * FROM Payment"""):
+                payment_list.append(row)
+            print(payment_list)
+            return payment_list
 
 
 
 
-    # if __name__ == '__main__':
-    # unittest.main()
+
+if __name__ == '__main__':
+    new_payment = Payment('vias', '1234567', 1)
+    Payment.read_payments()

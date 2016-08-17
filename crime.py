@@ -41,7 +41,7 @@ class Crime:
 
         customer_list = []
         with sqlite3.connect('bangazon.db') as conn:
-                c = conn.cursor()
+            c = conn.cursor()
 
         counter = 3
         print("1. Main Menu")
@@ -70,7 +70,7 @@ class Crime:
             '\n'
             'SO YOU WANNA MAKE YOUR BONES?'
             '\n' '\n'
-            )
+             )
 
         customer_name = input("ENTER YOUR NAME > ")
         customer_street_address = input("ENTER YOUR STREET ADDRESS > ")
@@ -79,13 +79,34 @@ class Crime:
         customer_zip = input("ENTER YOUR ZIP CODE > ")
         customer_phone = input("ENTER YOUR PHONE NUMBER > ")
 
-        new_customer = Customer(customer_name, customer_street_address, customer_city, customer_state, customer_zip, customer_phone)
-        # print(new_customer.customer_object)
-        new_order = Order(new_customer.customer_UUID, 0)
-        Crime.active_order = new_order.order_UUID
-        Crime.active_user = new_customer.customer_UUID
-        print("your active user", Crime.active_user)
-        self.show_products()
+
+        new_customer = Customer(customer_name,
+                                customer_street_address,
+                                customer_city,
+                                customer_state,
+                                customer_zip,
+                                customer_phone)
+
+        customer_list = []
+        with sqlite3.connect('bangazon.db') as conn:
+            c = conn.cursor()
+
+        for row in c.execute("""SELECT * FROM Customer c"""):
+            customer_list.append(row)
+
+        Crime.active_user = customer_list[-1][0]
+        print(Crime.active_user)
+        print(customer_list[-1][0])
+
+        ##### NEED A MAKE ORDER FUNCTION IN HERE, STILL####
+
+
+        # # print(new_customer.customer_object)
+        # new_order = Order(new_customer.customer_UUID, 0)
+        # Crime.active_order = new_order.order_UUID
+        # Crime.active_user = new_customer.customer_UUID
+        # print("your active user", Crime.active_user)
+        # self.show_products()
 
 
     def show_products(self):

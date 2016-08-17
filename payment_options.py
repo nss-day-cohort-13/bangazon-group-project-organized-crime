@@ -1,6 +1,5 @@
 import uuid
-import pickle
-
+from utility import *
 from customer import *
 
 class Payment():
@@ -19,27 +18,7 @@ class Payment():
                                       "customer id": self.customer_UUID,
                                       "payment option uuid": self.payment_option_UUID
                                       }
-        self.serialize_payment()
-
-    def serialize_payment(self):
-        with open('payments.txt', 'ab+') as file:
-            pickle.dump(self.payment_option_object, file)
-
-
-    @staticmethod
-    def read_payments():
-        payment_option_list = []
-        with open('payments.txt', 'rb+') as file:
-            while True:
-                try:
-                    payment_option_list.append(pickle.load(file))
-                except  EOFError:
-                    break
-            # print(payment_option_list)
-            return payment_option_list
-
-
-
+        self.write_to_database()
 
     # if __name__ == '__main__':
     # unittest.main()

@@ -1,4 +1,4 @@
-import pickle
+from utility import *
 import uuid
 
 
@@ -42,35 +42,7 @@ class Customer:
                                 "zipcode": self.zipcode,
                                 "phone": self.phone,
                                 "customer_UUID": self.customer_UUID}
-        self.serialize_customer()
-        # self.read_customers()
-
-    def serialize_customer(self):
-        '''
-        using pickle, serializes the customer_object, writing it to a
-        text file.
-        '''
-        # self.customer_dict = {}
-        # self.customer_dict.update(user_object)
-        with open('customers.txt', 'ab+') as f:
-            pickle.dump(self.customer_object, f)
-
-    @staticmethod
-    def read_customers():
-        '''
-        using pickle, deserializes customer_objects from txt file
-        and adds each item to a list, which is then returned, allowing access
-        to customer data in other modules
-        '''
-        customer_list = []
-        with open('customers.txt', 'rb+') as f:
-            while True:
-                try:
-                    customer_list.append(pickle.load(f))
-                except EOFError:
-                    break
-            # print(customer_list)
-            return customer_list
+        self.write_to_database()
 
 if __name__ == '__main__':
     Customer.read_customers()

@@ -1,4 +1,4 @@
-import pickle
+from utility import *
 import uuid
 
 class Order:
@@ -28,29 +28,7 @@ class Order:
                         "payment_UUID": self.payment_UUID,
                         "paid": self.paid
                         }
-        self.create_order()
-
-    def create_order(self):
-        """ Serializes a new order by pickling to the orders.txt file. """
-
-        with open("orders.txt", "ab+") as pickle_file:
-            pickle.dump(self.order_data, pickle_file)
-
-    @staticmethod
-    def read_orders():
-        """ Deserializes all the pickled orders in the orders.txt file."""
-
-        orders_deserialized = []
-        with open("orders.txt", "rb+") as pickle_file:
-            while True:
-                try:
-                    orders_deserialized.append(pickle.load(pickle_file))
-                except FileNotFoundError:
-                    print("I'm a potato!")
-                except EOFError:
-                    break
-            print(orders_deserialized)
-            return orders_deserialized
+        self.write_to_database()
 
 if __name__ == '__main__':
     Order.read_orders()

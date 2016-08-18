@@ -123,6 +123,7 @@ class Crime:
                 self.orders = read_from_table('bangazon.db', 'SELECT * FROM Customer_order c WHERE c.customer_UUID = %s ' % self.active_user)
                 self.active_order = self.orders[-1]
                 print("ACTIVE ORDER", self.active_order)
+                print(self.active_order[0])
                 write_to_table('bangazon.db', "insert into Order_line_item values(?,?,?)", (None, self.active_order[1], product_list[which -4][0]))
             else:
                 write_to_table('bangazon.db', "insert into Order_line_item values(?,?,?)", (None, self.active_order[1], product_list[which -4][0]))
@@ -156,40 +157,57 @@ class Crime:
     #     # print(product_list[(which - 1)]["product_name"])
 
     def show_order(self):
-        customer_order = read_from_table('bangazon.db', """select c.name as CustomerName,o.order_UUID as OrderNumber,p.name_of_product as ProductName,p.unit_cost_of_product as ProductPrice from Product p, Customer_order o, Order_line_item li, Customer c where o.order_UUID = li.order_UUID and li.product_UUID = p.product_UUID and c.customer_UUID = %s""" % self.active_user)
+        customer_order = read_from_table('bangazon.db', """select c.name as CustomerName,
+                                          %s as OrderNumber,
+                                          p.name_of_product as ProductName,
+                                          p.unit_cost_of_product as ProductPrice from Product p,
+                                          Customer_order o, Order_line_item li, Customer c
+                                          where %s = li.order_UUID
+                                          and li.product_UUID = p.product_UUID
+                                          and c.customer_UUID = %s""" % (self.active_order[0], self.active_order[0], self.active_user))
 
 
         for row in customer_order:
             self.total_price += int(row[3])
         print("$",self.total_price)
+        self.show_payments()
 
 
-    def show_payments():
-        payment_list = Payment.read_payments()
-        active_user_payments = []
-        for payment in payment_list:
-            if Crime.active_user == payment["customer id"]:
-                active_user_payments.append(payment)
-        if len(active_user_payments) == 0:
-            Crime.create_payment()
-            payment_list = Payment.read_payments()
-            for payment in payment_list:
-                if Crime.active_user == payment["customer id"]:
-                    active_user_payments.append(payment)
+    def show_payments(self):
+        # payment_list = Payment.read_payments()
+        # active_user_payments = []
+        # for payment in payment_list:
+        #     if Crime.active_user == payment["customer id"]:
+        #         active_user_payments.append(payment)
+        # if len(active_user_payments) == 0:
+        #     Crime.create_payment()
+        #     payment_list = Payment.read_payments()
+        #     for payment in payment_list:
+        #         if Crime.active_user == payment["customer id"]:
+        #             active_user_payments.append(payment)
 
+        # counter = 1
+        # for payment in active_user_payments:
+
+        #     print(str(counter) + ". " + str(payment["payment option name"]))
+        #     counter += 1
+        # which = int(input("which card? "))
+        # Crime.active_payment = active_user_payments[(which - 1)]["payment option uuid"]
+        # if Crime.active_payment != "":
+        #     Crime.show_order_total()
+        # print(self.active_payment)
         counter = 1
-        for payment in active_user_payments:
+        payment_list = read_from_table('bangazon.db', 'SELECT * FROM Payment p WHERE p.customer_UUID = %s' % self.active_user)
+        if len(payment_list) == 0:
+            self.create_payment()
+        else:
+            for payment in payment_list:
+                print(str(counter) + ". " + str(payment[1]))
+                counter +=1
+            selection = int(input("which card? "))
+            print(payment_list[selection - 1])
 
-            print(str(counter) + ". " + str(payment["payment option name"]))
-            counter += 1
-        which = int(input("which card? "))
-        Crime.active_payment = active_user_payments[(which - 1)]["payment option uuid"]
-        if Crime.active_payment != "":
-            Crime.show_order_total()
-
-        # print(Crime.active_payment)
-
-    def create_payment():
+    def create_payment(self):
         print(
             '\n'
             'BETTER HAVE MY MONEY!'
@@ -197,7 +215,7 @@ class Crime:
             )
         name = input("CARD NAME > ")
         account = input("ACCOUNT NUMBER > ")
-        new_payment = Payment(name, account, Crime.active_user)
+        write_to_table('bangazon.db', "insert into Payment values(?, ?, ?, ?)", (None, name, account, self.active_user) )
 
     def show_order_total():
         print(

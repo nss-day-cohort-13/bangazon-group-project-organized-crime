@@ -70,7 +70,7 @@ class Order:
     #         print(orders_deserialized)
     #         return orders_deserialized
 
-if __name__ == '__main__':
-    # Order.read_orders()
-    new_order = Order(1,1)
-    Order.read_orders()
+# if __name__ == '__main__':
+#     # Order.read_orders()
+#     new_order = Order(1,1)
+#     Order.read_orders()

@@ -1,6 +1,6 @@
 import sqlite3
 
-def write_to_order_line_items(database_file, sql_commands, sql_row_values):
+def write_to_table(database_file, sql_commands, sql_row_values):
   with sqlite3.connect(database_file) as conn:
     c = conn.cursor()
 
@@ -8,7 +8,7 @@ def write_to_order_line_items(database_file, sql_commands, sql_row_values):
 
     conn.commit()
 
-def read_order_line_items(database_file, sql_commands):
+def read_from_table(database_file, sql_commands):
   return_list = []
   with sqlite3.connect(database_file) as conn:
     c = conn.cursor()

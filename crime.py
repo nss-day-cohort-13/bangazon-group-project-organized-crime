@@ -62,11 +62,7 @@ class Crime:
 
 
     def create_new_member(self):
-        # customer_address =
-        # customer_city =
-        # customer_state =
-        # customer_zip =
-        # customer_phone =
+
         print(
             '\n'
             'SO YOU WANNA MAKE YOUR BONES?'
@@ -88,7 +84,7 @@ class Crime:
         customer_list = read_from_table('bangazon.db', "SELECT * FROM Customer c")
         Crime.active_user = customer_list[-1][0]
         print(Crime.active_user)
-        print(customer_list[-1][0])
+        # print(customer_list[-1][0])
 
         ##### NEED A MAKE ORDER FUNCTION IN HERE, STILL####
 

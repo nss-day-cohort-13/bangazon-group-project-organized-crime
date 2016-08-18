@@ -98,7 +98,7 @@ class Crime:
 
 
     def show_products(self):
-        product_list = Product.read_products()
+        product_list = read_from_table('bangazon.db', 'SELECT * FROM Product p')
         counter = 4
         print("1. Checkout")
         print("2. Main Menu")

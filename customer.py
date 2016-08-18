@@ -72,6 +72,7 @@ class Customer:
         for row in c.execute("""SELECT * FROM Customer c"""):
             customer_list.append(row)
         print(customer_list[1][0])
+        return customer_list
 
 
 

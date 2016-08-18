@@ -40,17 +40,15 @@ class Crime:
 
     def choose_active_member(self):
 
-        customer_list = []
-        with sqlite3.connect('bangazon.db') as conn:
-            c = conn.cursor()
+        customer_list = read_from_table('bangazon.db', "SELECT * FROM Customer c")
 
         counter = 3
         print("1. Main Menu")
         print("2. Exit")
 
-        for row in c.execute("""SELECT * FROM Customer c"""):
-            customer_list.append(row)
-            print(str(counter) + ". " + str(row[1]))
+        for customer in customer_list:
+
+            print(str(counter) + ". " + str(customer[1]))
             counter +=1
 
         choice = int(input("who are you?"))
@@ -64,11 +62,7 @@ class Crime:
 
 
     def create_new_member(self):
-        # customer_address =
-        # customer_city =
-        # customer_state =
-        # customer_zip =
-        # customer_phone =
+
         print(
             '\n'
             'SO YOU WANNA MAKE YOUR BONES?'
@@ -81,16 +75,16 @@ class Crime:
         customer_state = input("ENTER YOUR STATE > ")
         customer_zipcode = input("ENTER YOUR ZIP CODE > ")
         customer_phone = input("ENTER YOUR PHONE NUMBER > ")
-
         customer_id = None
         customer = (customer_id,customer_name,customer_street_address,
                     customer_city,customer_state,customer_zipcode,customer_phone)
+
         write_to_table('bangazon.db', "insert into customer values(?,?,?,?,?,?,?)",customer)
 
         customer_list = read_from_table('bangazon.db', "SELECT * FROM Customer c")
         Crime.active_user = customer_list[-1][0]
         print(Crime.active_user)
-        print(customer_list[-1][0])
+        # print(customer_list[-1][0])
 
         ##### NEED A MAKE ORDER FUNCTION IN HERE, STILL####
 

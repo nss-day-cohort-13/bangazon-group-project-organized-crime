@@ -1,2 +1,7 @@
 .DS_Store
 __pycache__
+customers.txt
+order_line_items.txt
+orders.txt
+payments.txt
+products.txt

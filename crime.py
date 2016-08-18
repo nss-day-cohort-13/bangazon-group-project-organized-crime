@@ -7,12 +7,12 @@ from utility_functions import *
 
 class Crime:
     def __init__(self):
-        self.active_user = ""
+        self.active_user = None
         self.payment_choice = ""
         self.payment_id = ""
         # self.payment_id = []
         self.product_list = ""
-        self.active_order = ""
+        self.active_order = None
         self.active_payment = ""
         self.total_price = 0
 
@@ -54,7 +54,7 @@ class Crime:
         choice = int(input("who are you?"))
 
         print(customer_list[choice - 3])
-        Crime.active_user = customer_list[choice - 3][0]
+        self.active_user = customer_list[choice - 3][0]
 
         self.show_products()
 
@@ -82,8 +82,8 @@ class Crime:
         write_to_table('bangazon.db', "insert into customer values(?,?,?,?,?,?,?)",customer)
 
         customer_list = read_from_table('bangazon.db', "SELECT * FROM Customer c")
-        Crime.active_user = customer_list[-1][0]
-        print(Crime.active_user)
+        self.active_user = customer_list[-1][0]
+        print(self.active_user)
         # print(customer_list[-1][0])
 
         ##### NEED A MAKE ORDER FUNCTION IN HERE, STILL####
@@ -94,7 +94,7 @@ class Crime:
         # Crime.active_order = new_order.order_UUID
         # Crime.active_user = new_customer.customer_UUID
         # print("your active user", Crime.active_user)
-        # self.show_products()
+        self.show_products()
 
 
     def show_products(self):
@@ -116,7 +116,17 @@ class Crime:
         elif which == 3:
             exit()
         elif which > 3:
-            new_OLI = OrderLineItem(Crime.active_order, product_list[(which - 4)]["product_UUID"])
+            if self.active_order == None or self.active_order[1] != self.active_user:
+
+                print("ACTIVE USER", self.active_user)
+                write_to_table('bangazon.db', "insert into Customer_order values(?,?,?,?)",(None, self.active_user, 0, 0))
+                self.orders = read_from_table('bangazon.db', 'SELECT * FROM Customer_order c WHERE c.customer_UUID = %s ' % self.active_user)
+                self.active_order = self.orders[-1]
+                print("ACTIVE ORDER", self.active_order)
+                write_to_table('bangazon.db', "insert into Order_line_item values(?,?,?)", (None, self.active_order[1], product_list[which -4][0]))
+            else:
+                write_to_table('bangazon.db', "insert into Order_line_item values(?,?,?)", (None, self.active_order[1], product_list[which -4][0]))
+
             self.show_products()
         else:
             print("something went wrong")

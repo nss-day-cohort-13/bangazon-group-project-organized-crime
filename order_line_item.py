@@ -1,4 +1,4 @@
-import pickle
+import sqlite3
 import uuid
 
 class OrderLineItem:
@@ -16,42 +16,38 @@ class OrderLineItem:
     def __init__(self, order_ID, product_ID):
         self.order_UUID = order_ID
         self.product_UUID = product_ID
-        self.order_line_item_id = uuid.uuid4().int
+        self.order_line_item_id = None
         self.order_line_item_object = {"order_line_item_UUID": self.order_line_item_id,
                                        "order_UUID": self.order_UUID,
                                        "product_UUID": self.product_UUID}
-        self.serialize()
+        self.write_to_order_line_items()
 
-    def serialize(self):
-        '''
-        using pickle, serializes the order_line_item_object, writing it to a
-        text file.
-        '''
-        with open('order_line_items.txt', 'ab+') as file:
-            pickle.dump(self.order_line_item_object, file)
+    def write_to_order_line_items(self):
+      with sqlite3.connect('bangazon.db') as conn:
+        c = conn.cursor()
+
+        c.execute("insert into Order_line_item values(?, ?, ?)",
+                  (self.order_line_item_id, self.order_UUID, self.product_UUID))
+
+        conn.commit()
 
     @staticmethod
     def read_order_line_items():
-        '''
-        using pickle, deserializes order_line_item_objects from txt file
-        and adds each item to a list, which is then returned, allowing access
-        to order line item data in other modules
-        '''
-        order_line_items_list = []
-        with open('order_line_items.txt', 'rb') as file:
-            while True:
-                try:
-                    order_line_items_list.append(pickle.load(file))
-                except EOFError:
-                    break
+      order_line_item = []
+      with sqlite3.connect('bangazon.db') as conn:
+        c = conn.cursor()
 
-            # print(order_line_items_list)
-            return order_line_items_list
+      for row in c.execute("SELECT * FROM Order_line_item oli"):
+        order_line_item.append(row)
+
+      print(order_line_item)
+      return order_line_item
 
 
 
 
 
 
-# if __name__ == '__main__':
-#     OrderLineItem.read_order_line_items()
+if __name__ == '__main__':
+    OrderLineItem(234324235, 235436346356)
+    OrderLineItem.read_order_line_items()

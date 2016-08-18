@@ -3,6 +3,7 @@ from payment_options import *
 from customer import *
 from products import *
 from order_line_item import *
+from utility_functions import *
 
 class Crime:
     def __init__(self):
@@ -78,24 +79,15 @@ class Crime:
         customer_street_address = input("ENTER YOUR STREET ADDRESS > ")
         customer_city = input("ENTER YOUR CITY > ")
         customer_state = input("ENTER YOUR STATE > ")
-        customer_zip = input("ENTER YOUR ZIP CODE > ")
+        customer_zipcode = input("ENTER YOUR ZIP CODE > ")
         customer_phone = input("ENTER YOUR PHONE NUMBER > ")
 
+        customer_id = None
+        customer = (customer_id,customer_name,customer_street_address,
+                    customer_city,customer_state,customer_zipcode,customer_phone)
+        write_to_table('bangazon.db', "insert into customer values(?,?,?,?,?,?,?)",customer)
 
-        new_customer = Customer(customer_name,
-                                customer_street_address,
-                                customer_city,
-                                customer_state,
-                                customer_zip,
-                                customer_phone)
-
-        customer_list = []
-        with sqlite3.connect('bangazon.db') as conn:
-            c = conn.cursor()
-
-        for row in c.execute("""SELECT * FROM Customer c"""):
-            customer_list.append(row)
-
+        customer_list = read_from_table('bangazon.db', "SELECT * FROM Customer c")
         Crime.active_user = customer_list[-1][0]
         print(Crime.active_user)
         print(customer_list[-1][0])

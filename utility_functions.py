@@ -16,5 +16,5 @@ def read_from_table(database_file, sql_commands):
   for row in c.execute(sql_commands):
     return_list.append(row)
 
-  print(return_list)
+  print("LIST RETURNED FROM read_from_table",return_list)
   return return_list

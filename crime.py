@@ -110,7 +110,7 @@ class Crime:
 
         which = int(input("what you want? "))
         if which == 1:
-            Crime.show_order()
+            self.show_order()
         elif which == 2:
             self.welcome_menu()
         elif which == 3:
@@ -155,27 +155,13 @@ class Crime:
     #     # print(new_OLI.order_line_item_object)
     #     # print(product_list[(which - 1)]["product_name"])
 
-    def show_order():
-            order_line_item_list = OrderLineItem.read_order_line_items()
-            active_order_line_items = []
-            product_list = Product.read_products()
-            total_price = 0
-
-            for OLI in order_line_item_list:
-                if Crime.active_order == OLI["order_UUID"]:
-                    active_order_line_items.append(OLI)
-
-            # print("active OLI: ", active_order_line_items)
+    def show_order(self):
+        customer_order = read_from_table('bangazon.db', """select c.name as CustomerName,o.order_UUID as OrderNumber,p.name_of_product as ProductName,p.unit_cost_of_product as ProductPrice from Product p, Customer_order o, Order_line_item li, Customer c where o.order_UUID = li.order_UUID and li.product_UUID = p.product_UUID and c.customer_UUID = %s""" % self.active_user)
 
 
-            for item in active_order_line_items:
-                for product in product_list:
-                    if product['product_UUID'] == item['product_UUID']:
-                        print(product["product_name"])
-                        total_price += float(product["product_price"])
-            print("you gotta pay: ", total_price)
-            Crime.total_price = total_price
-            Crime.show_payments()
+        for row in customer_order:
+            self.total_price += int(row[3])
+        print("$",self.total_price)
 
 
     def show_payments():
